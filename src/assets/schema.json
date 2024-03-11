@@ -1,0 +1,62 @@
+{
+  "charts": {
+    "userId": "",
+    "chart": [
+      {
+        "id": 0,
+        "day": "Monday",
+        "breakfast": "Upma",
+        "lunch": "Tadka Dahi and Rice",
+        "dinner": "Paneer Makhani"
+      },
+      {
+        "id": 1,
+        "day": "Tuesday",
+        "breakfast": "Vegetable Sandwitch",
+        "lunch": "Kadhi",
+        "dinner": "Kadhai Paneer"
+      },
+      {
+        "id": 2,
+        "day": "Wednesday",
+        "breakfast": "Utpam",
+        "lunch": "Paneer Makhani",
+        "dinner": "Chinese"
+      },
+      {
+        "id": 3,
+        "day": "Thursday",
+        "breakfast": "Omelete",
+        "lunch": "Kadhai Paneer",
+        "dinner": "Khichdi"
+      },
+      {
+        "id": 4,
+        "day": "Friday",
+        "breakfast": "Paneer Sandwitch",
+        "lunch": "Chinese",
+        "dinner": "Kofte"
+      },
+      {
+        "id": 5,
+        "day": "Saturday",
+        "breakfast": "Parantha",
+        "lunch": "Dal",
+        "dinner": "Tadka Dahi and Rice"
+      },
+      {
+        "id": 6,
+        "day": "Sunday",
+        "breakfast": "Poha",
+        "lunch": "Pulao",
+        "dinner": "Pulao"
+      }
+    ]
+  },
+  "foodItems": {
+    "userId": "",
+    "breakfast": "",
+    "lunch": "",
+    "dinner": ""
+  }
+}

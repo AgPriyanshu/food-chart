@@ -1,0 +1,5 @@
+1) Edit chart items
+2) Edit food items
+3) Template food and chart items list
+4) Loading state
+5) Save on changes 

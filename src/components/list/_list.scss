@@ -1,0 +1,39 @@
+.lists {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: 1;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-header {
+  margin-bottom: 1rem;
+}
+
+.list {
+  font-size: 1.4rem;
+  // flex-grow: 1;
+  &-group-item {
+    padding: 0.5rem 1rem;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem;
+    span {
+    }
+
+    input {
+      height: fit-content;
+      padding: 0;
+      outline: none;
+      font-size: 1.4rem;
+    }
+  }
+}
