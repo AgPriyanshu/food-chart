@@ -1,13 +1,7 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { auth, db } from './firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase';
 
 export const login = ({ username, password }, callback) => {
-  console.log({ username, password });
-
   signInWithEmailAndPassword(auth, username, password)
     .then((user) => {
       callback(true, user.user.uid);

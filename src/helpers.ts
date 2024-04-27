@@ -1,8 +1,11 @@
 import { cloneDeep, pull } from 'lodash';
 import { weekdays } from './constants';
 import { ChartRowItem, FoodItems } from './types';
-import { getRandomValue } from '../../utils/utils';
-export const chartRowsGenerator = (foodItems: FoodItems | null) => {
+import { getRandomValue } from './utils';
+
+export const chartRowsGeneratorFromFoodItems = (
+  foodItems: FoodItems | null,
+) => {
   const rows: ChartRowItem[] = [];
   if (foodItems) {
     const {

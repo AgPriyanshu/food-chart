@@ -1,5 +1,7 @@
-1) Edit chart items
-2) Edit food items
-3) Template food and chart items list
-4) Loading state
-5) Save on changes 
+// TODO
+1) E̶d̶i̶t̶ c̶h̶a̶r̶t̶ i̶t̶e̶m̶s̶
+2) T̶e̶m̶p̶l̶a̶t̶e̶ f̶o̶o̶d̶ a̶n̶d̶ c̶h̶a̶r̶t̶ i̶t̶e̶m̶s̶ l̶i̶s̶t̶
+3) Save Chart Items
+4) Edit food items
+5) Loading state
+6) Save on changes 

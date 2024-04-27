@@ -1,42 +1,40 @@
 import { AgGridReact } from 'ag-grid-react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { FoodItems, Header, List } from './components';
-import { Chart } from './types';
-import { db } from './utils/firebase';
-import { Button } from 'react-bootstrap';
-
-const getChart = async (): Promise<Chart[]> => {
-  const collectionDocs = query(
-    collection(db, 'charts'),
-    where('userId', '==', 'i0IbkKf856QXFId434xiy86UROh1'),
-  );
-  const querySnapshot = await getDocs(collectionDocs);
-  return querySnapshot.docs[0].get('chart');
-};
-
-const getFoodItems = async (): Promise<FoodItems> => {
-  const collectionDocs = query(
-    collection(db, 'foodItems'),
-    where('userId', '==', 'i0IbkKf856QXFId434xiy86UROh1'),
-  );
-  const querySnapshot = await getDocs(collectionDocs);
-  return querySnapshot.docs[0].data();
-};
-
+import { isNull } from 'lodash';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Header, List } from './components';
+import { getChart, getFoodItems } from './firebase-api';
+import { Chart, FoodItems } from './types';
 export const App = () => {
   // Ref.
   const gridRef = useRef<AgGridReact<Chart> | null>(null);
+
   // States.
-  const [chartRows, setRowData] = useState<Chart[] | null>(null);
-  const [foodItems, setFoodItems] = useState<FoodItems | null>(null);
+  const [rowData, setRowData] = useState<Chart[] | null>(null);
+  const [foodItems, setFoodItems] = useState<FoodItems>({
+    breakfast: [],
+    lunch: [],
+    dinner: [],
+  });
 
   // useEffects.
   useEffect(() => {
+    // Seed Data functions.
+    // fillDefaultFoodItems();
+    // fillDefaultChart();
+
     getChart().then((chart) => setRowData(chart));
-    getFoodItems().then((foodItems) => setFoodItems(foodItems));
+    getFoodItems().then((foodItems) => setFoodItems(foodItems as FoodItems));
     gridRef.current?.api?.sizeColumnsToFit();
   }, []);
+
+  useEffect(() => {
+    if (!isNull(foodItems)) {
+      // console.log(foodItems);
+    }
+  }, [foodItems]);
+
+  // Handlers.
+  const updateChartFirebase = (row) => {};
 
   const onGridReady = (params) => {
     params.api.sizeColumnsToFit(); // Size columns to fit initially
@@ -52,6 +50,43 @@ export const App = () => {
     }
   };
 
+  // Table Helpers.
+  const columnDefs: any = useMemo(() => {
+    return [
+      {
+        field: 'id',
+        hide: true,
+        flex: 1,
+        editable: true,
+      },
+      { field: 'day', flex: 1 },
+      {
+        field: 'breakfast',
+        flex: 1,
+        editable: true,
+        singleClickEdit: true,
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams: () => ({ values: foodItems.breakfast }),
+      },
+      {
+        field: 'lunch',
+        flex: 1,
+        editable: true,
+        singleClickEdit: true,
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams: () => ({ values: foodItems.lunch }),
+      },
+      {
+        field: 'dinner',
+        flex: 1,
+        editable: true,
+        singleClickEdit: true,
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams: () => ({ values: foodItems.dinner }),
+      },
+    ];
+  }, [foodItems]);
+
   return (
     <div className="fcg">
       <Header />
@@ -59,14 +94,8 @@ export const App = () => {
         className="fcg-grid ag-theme-quartz" // applying the grid theme
       >
         <AgGridReact
-          columnDefs={[
-            { field: 'id', hide: true, flex: 1 },
-            { field: 'day', flex: 1 },
-            { field: 'breakfast', flex: 1 },
-            { field: 'lunch', flex: 1 },
-            { field: 'dinner', flex: 1 },
-          ]}
-          rowData={chartRows}
+          columnDefs={columnDefs}
+          rowData={rowData}
           domLayout="autoHeight"
           ref={gridRef}
           onGridReady={onGridReady}
