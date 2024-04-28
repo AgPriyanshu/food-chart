@@ -12,48 +12,21 @@
   }
 
   &-grid {
+    .ag-select-list {
+      max-height: 200px !important; /* Set the maximum height */
+      overflow-y: auto; /* Add vertical scrollbar when necessary */
+    }
     display: flex;
     flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
 
     .fcg-buttons-container {
-      margin: 1rem;
+      margin: 1rem 0rem;
       position: relative;
       display: flex;
       width: 100%;
       justify-content: space-between;
       // align-items: center;
       // justify-content: center;
-
-      .fcg-button {
-        background: transparent;
-        border: 1px solid lightgray;
-        border-radius: 10px;
-        padding: 1.8rem;
-
-        &:hover {
-          background-color: lightgray;
-        }
-
-        &--align {
-          margin-left: auto;
-        }
-        &--save {
-          font-size: 1.4rem;
-          color: black;
-          width: 20rem;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-        }
-
-        @include response(phone) {
-          padding: 1rem;
-          width: fit-content;
-        }
-      }
     }
   }
 
@@ -81,4 +54,38 @@
   }
 }
 
+.fcg-button {
+  width: fit-content;
+  background: transparent;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  padding: 1.4rem;
+
+  &:hover {
+    background-color: lightgray;
+  }
+
+  &--align {
+    margin-right: auto;
+  }
+  &--save {
+    font-size: 1.4rem;
+    color: black;
+    width: 10rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @include response(phone) {
+    padding: 1rem;
+    width: fit-content;
+  }
+}
+.food-items-btn {
+  font-size: 1.4rem;
+  color: black;
+  align-self: center;
+}
 @import './components/list/list';

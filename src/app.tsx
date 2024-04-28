@@ -1,11 +1,11 @@
 import { AgGridReact } from 'ag-grid-react';
 import { isNull } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Toast, ToastContainer } from 'react-bootstrap';
 import { Header, List } from './components';
+import { getUserId } from './constants';
 import { getChart, getFoodItems, updateChart } from './firebase-api';
 import { Chart, FoodItems } from './types';
-import { Button, Toast, ToastContainer } from 'react-bootstrap';
-import { getUserId } from './constants';
 export const App = () => {
   // Ref.
   const gridRef = useRef<AgGridReact<Chart> | null>(null);
@@ -19,7 +19,7 @@ export const App = () => {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
-
+  const [showFoodItemsList, setShowFoodItemsList] = useState(false);
   // useEffects.
   useEffect(() => {
     // Seed Data functions.
@@ -124,11 +124,24 @@ export const App = () => {
           </button>
         </div>
       </div>
-      <div className="fcg-lists">
-        <List header="Breakfast" listItems={foodItems?.breakfast}></List>
-        <List header="Lunch" listItems={foodItems?.lunch}></List>
-        <List header="Dinner" listItems={foodItems?.dinner}></List>
-      </div>
+      <button
+        onClick={() => {
+          setShowFoodItemsList(!showFoodItemsList);
+        }}
+        className="fcg-button food-items-btn"
+      >
+        <span>
+          {!showFoodItemsList ? 'Show food items' : 'Hide food items'}
+        </span>
+      </button>
+
+      {showFoodItemsList && (
+        <div className="fcg-lists">
+          <List header="Breakfast" listItems={foodItems?.breakfast}></List>
+          <List header="Lunch" listItems={foodItems?.lunch}></List>
+          <List header="Dinner" listItems={foodItems?.dinner}></List>
+        </div>
+      )}
 
       <ToastContainer position="top-end" className="p-3" style={{ zIndex: 1 }}>
         <Toast
