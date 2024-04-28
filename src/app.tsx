@@ -5,10 +5,10 @@ import { Button, Toast, ToastContainer } from 'react-bootstrap';
 import { Header, List } from './components';
 import { getUserId } from './constants';
 import { getChart, getFoodItems, updateChart } from './firebase-api';
-import { Chart, FoodItems } from './types';
+import { Chart, ChartRowItem, FoodItems } from './types';
 export const App = () => {
   // Ref.
-  const gridRef = useRef<AgGridReact<Chart> | null>(null);
+  const gridRef = useRef<AgGridReact<ChartRowItem> | null>(null);
 
   // States.
   const [rowData, setRowData] = useState<Chart | null>(null);
