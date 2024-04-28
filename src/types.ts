@@ -1,10 +1,4 @@
-export type Chart = {
-  id: string;
-  day: string;
-  breakfast: string;
-  lunch: string;
-  dinner: string;
-};
+export type Chart = ChartRowItem[];
 
 export enum FoodType {
   Breakfast = 'breakfast',

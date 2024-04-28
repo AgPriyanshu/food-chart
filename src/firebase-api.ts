@@ -6,17 +6,18 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore';
-import { defaultFoodItems, userId } from './constants';
+import { defaultFoodItems, getUserId } from './constants';
 import { chartRowsGeneratorFromFoodItems } from './helpers';
-import { Chart } from './types';
+import { Chart, ChartRowItem } from './types';
 import { db } from './utils/firebase';
 
-export const getChart = async (): Promise<Chart[]> => {
+export const getChart = async (): Promise<Chart> => {
   const collectionDocs = query(
     collection(db, 'charts'),
     where('userId', '==', 'i0IbkKf856QXFId434xiy86UROh1'),
   );
   const querySnapshot = await getDocs(collectionDocs);
+
   return querySnapshot.docs[0].get('chart');
 };
 
@@ -29,6 +30,18 @@ export const getFoodItems = async (): Promise<DocumentData> => {
   return querySnapshot.docs[0].data();
 };
 
+export const updateChart = async (chart: Chart): Promise<any> => {
+  const collectionDocs = query(
+    collection(db, 'charts'),
+    where('userId', '==', 'i0IbkKf856QXFId434xiy86UROh1'),
+  );
+  const querySnapshot = await getDocs(collectionDocs);
+  return setDoc(querySnapshot.docs[0].ref, {
+    chart: chart,
+    userId: getUserId(),
+  });
+};
+
 export const fillDefaultChart = async (): Promise<any> => {
   const collectionDocs = query(
     collection(db, 'charts'),
@@ -37,7 +50,7 @@ export const fillDefaultChart = async (): Promise<any> => {
   const querySnapshot = await getDocs(collectionDocs);
   return setDoc(querySnapshot.docs[0].ref, {
     chart: chartRowsGeneratorFromFoodItems(defaultFoodItems),
-    userId,
+    userId: getUserId(),
   });
 };
 
@@ -49,6 +62,6 @@ export const fillDefaultFoodItems = async (): Promise<any> => {
   const querySnapshot = await getDocs(collectionDocs);
   return setDoc(querySnapshot.docs[0].ref, {
     ...defaultFoodItems,
-    userId,
+    userId: getUserId(),
   });
 };

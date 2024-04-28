@@ -17,16 +17,42 @@
     // justify-content: center;
     // align-items: center;
 
-    .fcg-button {
-      align-self: center;
-      margin: 2rem;
-      background: transparent;
-      border: 1px solid lightgray;
-      border-radius: 10px;
-      padding: 1.8rem;
+    .fcg-buttons-container {
+      margin: 1rem;
+      position: relative;
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      // align-items: center;
+      // justify-content: center;
 
-      &:hover {
-        background-color: lightgray;
+      .fcg-button {
+        background: transparent;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        padding: 1.8rem;
+
+        &:hover {
+          background-color: lightgray;
+        }
+
+        &--align {
+          margin-left: auto;
+        }
+        &--save {
+          font-size: 1.4rem;
+          color: black;
+          width: 20rem;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        @include response(phone) {
+          padding: 1rem;
+          width: fit-content;
+        }
       }
     }
   }
@@ -38,6 +64,20 @@
       text-align: center;
       flex: 1;
     }
+  }
+  .toast {
+    &-container {
+      width: 25rem;
+    }
+    & > * {
+      @include response(phone) {
+        font-size: 1rem;
+      }
+    }
+  }
+  .toast-body {
+    font-size: 1.4rem;
+    color: white;
   }
 }
 
