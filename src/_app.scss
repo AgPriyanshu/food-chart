@@ -33,11 +33,19 @@
   &-lists {
     display: flex;
     justify-content: space-between;
+    gap: 4rem;
     > * {
       text-align: center;
       flex: 1;
     }
   }
+
+  &-login-modal {
+  }
+
+  &-login-form {
+  }
+
   .toast {
     &-container {
       width: 25rem;

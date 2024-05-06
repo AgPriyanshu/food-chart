@@ -1,12 +1,11 @@
 import { isNil } from 'lodash';
 
 export const getUserId = () => {
-  const localUserId = localStorage.getItem('userId');
-  if (isNil(localUserId)) {
-    localStorage.setItem('userId', 'i0IbkKf856QXFId434xiy86UROh1');
-    return localStorage.getItem('userId');
-  }
-  return localUserId;
+  return localStorage.getItem('userId');
+};
+
+export const setUserId = (id: string) => {
+  localStorage.setItem('userId', id);
 };
 
 export const weekdays = [

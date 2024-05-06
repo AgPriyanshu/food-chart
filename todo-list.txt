@@ -1,7 +1,9 @@
 // TODO
 1) E̶d̶i̶t̶ c̶h̶a̶r̶t̶ i̶t̶e̶m̶s̶
 2) T̶e̶m̶p̶l̶a̶t̶e̶ f̶o̶o̶d̶ a̶n̶d̶ c̶h̶a̶r̶t̶ i̶t̶e̶m̶s̶ l̶i̶s̶t̶
-3) Save Chart Items
-4) Edit food items
-5) Loading state
-6) Save on changes 
+3) S̶a̶v̶e̶ C̶h̶a̶r̶t̶ I̶t̶e̶m̶s̶
+4) L̶o̶g̶i̶n̶ F̶o̶r̶m̶
+5) E̶d̶i̶t̶ f̶o̶o̶d̶ i̶t̶e̶m̶s̶
+6) Add new foodItems
+7) D̶e̶l̶e̶t̶e̶ f̶o̶o̶d̶I̶t̶e̶m̶s̶
+P7) Update values in chart

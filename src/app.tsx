@@ -1,17 +1,25 @@
 import { AgGridReact } from 'ag-grid-react';
-import { isNull } from 'lodash';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Toast, ToastContainer } from 'react-bootstrap';
+import { isNull, pull, pullAt } from 'lodash';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Form, Modal, Toast, ToastContainer } from 'react-bootstrap';
 import { Header, List } from './components';
-import { getUserId } from './constants';
-import { getChart, getFoodItems, updateChart } from './firebase-api';
+import { getUserId, setUserId } from './constants';
+import {
+  fillDefaultChart,
+  fillDefaultFoodItems,
+  getChart,
+  getFoodItems,
+  updateChart,
+  updateFoodItems,
+} from './firebase-api';
 import { Chart, ChartRowItem, FoodItems } from './types';
+import { login } from './utils';
 export const App = () => {
   // Ref.
   const gridRef = useRef<AgGridReact<ChartRowItem> | null>(null);
 
   // States.
-  const [rowData, setRowData] = useState<Chart | null>(null);
+  const [chartData, setChartData] = useState<Chart | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItems>({
     breakfast: [],
     lunch: [],
@@ -20,14 +28,26 @@ export const App = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showFoodItemsList, setShowFoodItemsList] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(!getUserId());
+
   // useEffects.
   useEffect(() => {
-    // Seed Data functions.
-    // fillDefaultFoodItems();
-    // fillDefaultChart();
-    getUserId();
-    getChart().then((chart) => setRowData(chart));
-    getFoodItems().then((foodItems) => setFoodItems(foodItems as FoodItems));
+    getChart().then((chart) => {
+      if (isNull(chart)) {
+        fillDefaultChart().then((chart) => setChartData(chart));
+      } else {
+        setChartData(chart);
+      }
+    });
+
+    getFoodItems().then((foodItems) => {
+      if (isNull(foodItems)) {
+        fillDefaultFoodItems().then((foodItems) => setFoodItems(foodItems));
+      }
+      console.log(foodItems);
+      setFoodItems(foodItems as FoodItems);
+    });
+
     gridRef.current?.api?.sizeColumnsToFit();
   }, []);
 
@@ -53,13 +73,28 @@ export const App = () => {
   };
 
   const saveChart = () => {
-    if (rowData && rowData.length > 0) {
+    if (chartData && chartData.length > 0) {
       setIsSaving(true);
-      updateChart(rowData).then(() => {
+      updateChart(chartData).then(() => {
         setIsSaving(false);
         setShowToast(true);
       });
     }
+  };
+
+  const onFoodItemsChange = (type: string, newFoodItemsList: string[]) => {
+    const newFoodItems = { ...foodItems };
+    newFoodItems[type] = newFoodItemsList;
+    setFoodItems(newFoodItems);
+    updateFoodItems(newFoodItems);
+  };
+
+  const onClickDeleteFoodItem = (type: string, index: number) => {
+    const newFoodItems = { ...foodItems };
+    pullAt(newFoodItems[type], index);
+    console.log('on click called', { newFoodItems, index });
+    setFoodItems(newFoodItems);
+    updateFoodItems(newFoodItems);
   };
 
   // Table Helpers.
@@ -99,15 +134,36 @@ export const App = () => {
     ];
   }, [foodItems]);
 
+  // Handler.
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    login(
+      {
+        username: e.target.email.value,
+        password: e.target.password.value,
+      },
+      (isLoggedIn, userId) => {
+        if (isLoggedIn) {
+          setUserId(userId);
+          alert('User logged in successfully');
+          setShowLoginModal(false);
+        } else {
+          console.error('Invalid username or password');
+        }
+      },
+    );
+  };
+
   return (
     <div className="fcg">
       <Header />
+      {/* Food Chart */}
       <div
         className="fcg-grid ag-theme-quartz" // applying the grid theme
       >
         <AgGridReact
           columnDefs={columnDefs}
-          rowData={rowData}
+          rowData={chartData}
           domLayout="autoHeight"
           ref={gridRef}
           onGridReady={onGridReady}
@@ -124,6 +180,8 @@ export const App = () => {
           </button>
         </div>
       </div>
+
+      {/* Food Items */}
       <button
         onClick={() => {
           setShowFoodItemsList(!showFoodItemsList);
@@ -137,12 +195,31 @@ export const App = () => {
 
       {showFoodItemsList && (
         <div className="fcg-lists">
-          <List header="Breakfast" listItems={foodItems?.breakfast}></List>
-          <List header="Lunch" listItems={foodItems?.lunch}></List>
-          <List header="Dinner" listItems={foodItems?.dinner}></List>
+          <List
+            header="Breakfast"
+            listItems={foodItems?.breakfast}
+            onChange={onFoodItemsChange}
+            onDelete={onClickDeleteFoodItem}
+            type="breakfast"
+          ></List>
+          <List
+            header="Lunch"
+            listItems={foodItems?.lunch}
+            onChange={onFoodItemsChange}
+            onDelete={onClickDeleteFoodItem}
+            type="lunch"
+          ></List>
+          <List
+            header="Dinner"
+            listItems={foodItems?.dinner}
+            onChange={onFoodItemsChange}
+            onDelete={onClickDeleteFoodItem}
+            type="dinner"
+          ></List>
         </div>
       )}
 
+      {/* Toast */}
       <ToastContainer position="top-end" className="p-3" style={{ zIndex: 1 }}>
         <Toast
           onClose={() => setShowToast(false)}
@@ -157,6 +234,31 @@ export const App = () => {
           <Toast.Body>Chart Saved Successfully</Toast.Body>
         </Toast>
       </ToastContainer>
+
+      {/* Login Modal */}
+      <Modal show={showLoginModal} centered contentClassName="fcg-login-modal">
+        <Modal.Header>Login</Modal.Header>
+        <Modal.Body>
+          <Form className="fcg-login-form" onSubmit={onSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="name@example.com"
+                name="email"
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" name="password" />
+            </Form.Group>
+            <Button type="submit">Login</Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
