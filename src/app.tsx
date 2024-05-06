@@ -135,8 +135,9 @@ export const App = () => {
   }, [foodItems]);
 
   // Handler.
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
+
     login(
       {
         username: e.target.email.value,
