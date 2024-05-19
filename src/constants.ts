@@ -8,6 +8,10 @@ export const setUserId = (id: string) => {
   localStorage.setItem('userId', id);
 };
 
+export const deleteUserId = () => {
+  localStorage.setItem('userId', '');
+};
+
 export const weekdays = [
   'Monday',
   'Tuesday',

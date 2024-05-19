@@ -1,6 +1,6 @@
 import { AgGridReact } from 'ag-grid-react';
-import { isNull, pullAt } from 'lodash';
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { isEmpty, isNil, isNull, pullAt } from 'lodash';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Form, Modal, Toast, ToastContainer } from 'react-bootstrap';
 import { Header, List } from './components';
 import { getUserId, setUserId } from './constants';
@@ -14,6 +14,7 @@ import {
 } from './firebase-api';
 import { Chart, ChartRowItem, FoodItems } from './types';
 import { login } from './utils';
+import { LoginModal } from './components/login-modal';
 export const App = () => {
   // Ref.
   const gridRef = useRef<AgGridReact<ChartRowItem> | null>(null);
@@ -44,18 +45,11 @@ export const App = () => {
       if (isNull(foodItems)) {
         fillDefaultFoodItems().then((foodItems) => setFoodItems(foodItems));
       }
-      console.log(foodItems);
       setFoodItems(foodItems as FoodItems);
     });
 
     gridRef.current?.api?.sizeColumnsToFit();
   }, []);
-
-  useEffect(() => {
-    if (!isNull(foodItems)) {
-      // console.log(foodItems);
-    }
-  }, [foodItems]);
 
   // Handlers.
   const onGridReady = (params) => {
@@ -92,7 +86,6 @@ export const App = () => {
   const onClickDeleteFoodItem = (type: string, index: number) => {
     const newFoodItems = { ...foodItems };
     pullAt(newFoodItems[type], index);
-    console.log('on click called', { newFoodItems, index });
     setFoodItems(newFoodItems);
     updateFoodItems(newFoodItems);
   };
@@ -237,7 +230,8 @@ export const App = () => {
       </ToastContainer>
 
       {/* Login Modal */}
-      <Modal show={showLoginModal} centered contentClassName="fcg-login-modal">
+      <LoginModal show={showLoginModal} onSubmit={onSubmit} />
+      {/* <Modal show={showLoginModal} centered contentClassName="fcg-login-modal">
         <Modal.Header>Login</Modal.Header>
         <Modal.Body>
           <Form className="fcg-login-form" onSubmit={onSubmit}>
@@ -259,7 +253,7 @@ export const App = () => {
             <Button type="submit">Login</Button>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

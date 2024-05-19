@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 
@@ -5,11 +6,13 @@ type ListItemProps = {
   onChange: (value, index) => void;
   value: string;
   index: number;
+  placeholder?: string;
 };
 export const ListItem: React.FC<ListItemProps> = ({
   onChange,
   value,
   index,
+  placeholder,
 }) => {
   // Refs.
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,7 +59,7 @@ export const ListItem: React.FC<ListItemProps> = ({
           }}
         />
       ) : (
-        <span>{value}</span>
+        <span>{!value ? placeholder : value}</span>
       )}
     </div>
   );

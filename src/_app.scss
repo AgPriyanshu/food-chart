@@ -40,12 +40,6 @@
     }
   }
 
-  &-login-modal {
-  }
-
-  &-login-form {
-  }
-
   .toast {
     &-container {
       width: 25rem;
@@ -97,3 +91,4 @@
   align-self: center;
 }
 @import './components/list/list';
+@import './components/login-modal/login-modal';

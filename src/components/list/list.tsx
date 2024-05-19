@@ -20,8 +20,14 @@ export const List: React.FC<ListProps> = ({
 }) => {
   const [list, setList] = useState<Array<string> | undefined>(listItems);
 
+  useEffect(() => {
+    if (listItems) {
+      setList(listItems);
+    }
+  }, [listItems]);
+
   const onChangeValue = (newValue, index) => {
-    if (list) {
+    if (list && newValue) {
       const newList = [...list];
       newList[index] = newValue;
       setList(newList);
@@ -33,28 +39,46 @@ export const List: React.FC<ListProps> = ({
     onDelete(type, index);
   };
 
-  useEffect(() => {
-    if (listItems) {
-      setList(listItems);
+  // Render functions.
+  const renderList = () => {
+    if (list) {
+      return (
+        <>
+          {list?.map((listItem, index) => (
+            <ListGroup.Item key={index}>
+              <ListItem
+                onChange={onChangeValue}
+                value={listItem}
+                index={index}
+              />
+              <TrashFill
+                className="list-item-icon"
+                color="#ff6048"
+                size={20}
+                onClick={() => onClickDelete(index)}
+              />
+            </ListGroup.Item>
+          ))}
+
+          <ListGroup.Item>
+            <ListItem
+              onChange={onChangeValue}
+              placeholder={'+'}
+              value=""
+              index={list.length}
+            />
+          </ListGroup.Item>
+        </>
+      );
+    } else {
+      return <></>;
     }
-  }, [listItems]);
+  };
 
   return (
     <div className="list-container">
       <h2 className="list-header">{header}</h2>
-      <ListGroup className="list">
-        {list?.map((listItem, index) => (
-          <ListGroup.Item key={index}>
-            <ListItem onChange={onChangeValue} value={listItem} index={index} />
-            <TrashFill
-              className="list-item-icon"
-              color="#ff6048"
-              size={20}
-              onClick={() => onClickDelete(index)}
-            />
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+      <ListGroup className="list">{renderList()}</ListGroup>
     </div>
   );
 };
