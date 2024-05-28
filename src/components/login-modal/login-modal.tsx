@@ -40,6 +40,7 @@ export const LoginModal = ({ show, onSubmit }) => {
             <Form.Control
               className="fcg-login-modal__input fcg-login-modal__input--password"
               type="password"
+              name="password"
               id="inputPassword5"
               aria-describedby="passwordHelpBlock"
               placeholder="Please enter your password"

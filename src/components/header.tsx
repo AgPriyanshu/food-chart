@@ -3,16 +3,16 @@ import { deleteUserId } from '../constants';
 
 export const Header = () => {
   return (
-    <>
-      <h1 className="fcg-header">Food Chart Generator</h1>;
+    <div className="fcg-header">
+      <h1 className="fcg-header__text">Food Chart Generator</h1>;
       <Button
-        className="w-25"
+        className="fcg-header__logout-btn"
         onClick={() => {
           deleteUserId();
         }}
       >
         Log Out
       </Button>
-    </>
+    </div>
   );
 };
